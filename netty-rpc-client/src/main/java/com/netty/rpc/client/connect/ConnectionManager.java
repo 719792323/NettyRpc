@@ -48,10 +48,12 @@ public class ConnectionManager {
         private static final ConnectionManager instance = new ConnectionManager();
     }
 
+    //单例
     public static ConnectionManager getInstance() {
         return SingletonHolder.instance;
     }
 
+    //更新连接对象
     public void updateConnectedServer(List<RpcProtocol> serviceList) {
         // Now using 2 collections to manage the service info and TCP connections because making the connection is async
         // Once service info is updated on ZK, will trigger this function
@@ -164,6 +166,7 @@ public class ConnectionManager {
 
     public RpcClientHandler chooseHandler(String serviceKey) throws Exception {
         int size = connectedServerNodes.values().size();
+        //没有可用的handler则阻塞等待
         while (isRunning && size <= 0) {
             try {
                 waitingForHandler();

@@ -62,6 +62,7 @@ public class ServiceDiscovery {
         }
     }
 
+    //获取zk上的注册服务列表
     private void getServiceAndUpdateServer() {
         try {
             List<String> nodeList = curatorClient.getChildren(Constant.ZK_REGISTRY_PATH);

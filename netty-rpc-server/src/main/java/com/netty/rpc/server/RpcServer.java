@@ -21,6 +21,7 @@ public class RpcServer extends NettyServer implements ApplicationContextAware, I
         super(serverAddress, registryAddress);
     }
 
+    //服务在启动的时候扫描得到所有的服务接口及其实现
     @Override
     public void setApplicationContext(ApplicationContext ctx) throws BeansException {
         Map<String, Object> serviceBeanMap = ctx.getBeansWithAnnotation(NettyRpcService.class);

@@ -25,8 +25,10 @@ public class ObjectProxy<T, P> implements InvocationHandler, RpcService<T, P, Se
         this.version = version;
     }
 
+    //调用代理函数
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        //在object类定义的方法
         if (Object.class == method.getDeclaringClass()) {
             String name = method.getName();
             if ("equals".equals(name)) {
@@ -41,7 +43,13 @@ public class ObjectProxy<T, P> implements InvocationHandler, RpcService<T, P, Se
                 throw new IllegalStateException(String.valueOf(method));
             }
         }
-
+        /**
+         * 这里每次使用代理远程调用服务，从Zookeeper上获取可用的服务地址，通过RpcClient send一个Request，等待该Request的Response返回。
+         *
+         * 这里原文有个比较严重的bug，在原文给出的简单的Test中是很难测出来的，原文使用了obj的wait和notifyAll来等待Response返回，会出现“假死等待”的情况：一个Request发送出去后，在obj.wait()调用之前可能Response就返回了，这时候在channelRead0里已经拿到了Response并且obj.notifyAll()已经在obj.wait()之前调用了，这时候send后再obj.wait()就出现了假死等待，客户端就一直等待在这里。使用CountDownLatch可以解决这个问题。
+         *
+         * 注意：这里每次调用的send时候才去和服务端建立连接，使用的是短连接，这种短连接在高并发时会有连接数问题，也会影响性能，优化后使用TCP长连接进行通信。
+         */
         RpcRequest request = new RpcRequest();
         request.setRequestId(UUID.randomUUID().toString());
         request.setClassName(method.getDeclaringClass().getName());

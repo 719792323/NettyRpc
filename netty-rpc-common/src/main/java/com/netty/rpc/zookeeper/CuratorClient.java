@@ -13,7 +13,11 @@ import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.Watcher;
 
 import java.util.List;
-
+/**
+ * curator是一个Java/JVM客户端库，用于zookeeper，一个分布式协调服务。
+ * 它包括一个高级API框架和实用程序，使ApacheZooKeeper的使用更加简单和可靠。
+ * 它还包括常见用例和扩展的方法，如服务发现和Java8异步DSL。
+ */
 public class CuratorClient {
     private CuratorFramework client;
 

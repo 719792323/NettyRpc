@@ -17,8 +17,7 @@ import java.util.Map;
 
 /**
  * 服务注册
- *
- * @author luxiaoxun
+ * 这里向ZK，进行自身注册
  */
 public class ServiceRegistry {
     private static final Logger logger = LoggerFactory.getLogger(ServiceRegistry.class);
